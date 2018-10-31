@@ -76,7 +76,7 @@ V.list = function (blog) {
     `)
   }
   let content = `
-  <h1>貼文列表</h1>
+  <h1>版面列表</h1>
   <p>您總共有 <strong>${blog.length}</strong> 個版面!</p>
   ${
     (() => {
@@ -93,7 +93,7 @@ V.list = function (blog) {
     ${list.join('\n')}
   </ul>
   `
-  return V.layout('貼文列表', content)
+  return V.layout('版面列表', content)
 }
 
 V.listpost = function (blog) {

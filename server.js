@@ -31,7 +31,6 @@ async function add (ctx) {
 }
 
 async function listpost (ctx) {
-  console.log(ctx.params.user)
   const posts = M.listpost(ctx.params.user)
   ctx.body = await V.listpost(posts)
 }

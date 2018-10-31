@@ -9,13 +9,13 @@ describe('簡易網誌系統', function () {
   })
 
   describe('GET /', function () { // 路徑 GET /
-    it('內文標題應該為《貼文列表》，而且只有 0 則貼文', function (done) {
+    it('內文標題應該為《版面列表》，而且只有 3 個版面', function (done) {
       request.get('/').expect(200, function (err, res) {
         if (err) return done(err)
 
         expect(res.header['content-type']).to.include('html') // 根目錄是個 html 文件
-        expect(res.text).to.include('<title>貼文列表</title>') // 內文標題為 Posts
-        expect(res.text).to.include('<p>您總共有 <strong>0</strong> 則貼文!</p>')
+        expect(res.text).to.include('<title>版面列表</title>') // 內文標題為 Posts
+        expect(res.text).to.include('<p>您總共有 <strong>3</strong> 個版面!</p>')
         done()
       })
     })
