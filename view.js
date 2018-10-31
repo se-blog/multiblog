@@ -98,7 +98,7 @@ V.list = function (blog) {
 
 V.listpost = function (blog) {
   let list = []
-  for (let post of blog.posts) {
+  for (let post of blog) {
     list.push(`
       <li>
         <h2>${post.title}</h2>
@@ -108,7 +108,7 @@ V.listpost = function (blog) {
   }
   let content = `
   <h1>貼文列表</h1>
-  <p>您總共有 <strong>${blog.posts.length}</strong> 則貼文!</p>
+  <p>您總共有 <strong>${blog.length}</strong> 則貼文!</p>
   ${
     (() => {
       let html = ''

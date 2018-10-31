@@ -28,8 +28,8 @@ M.list = function () {
 
 M.listpost = function (user) {
   for (let i of blog) {
-    if (blog[i].account === user) {
-      return blog[i]
+    if (i.account === user) {
+      return i.posts
     }
   }
 }
