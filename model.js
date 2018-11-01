@@ -6,8 +6,8 @@ const blog = [{'account': 'Jack', posts: []},
 
 M.add = function (post, user) {
   for (let i of blog) {
-    if (blog[i].account === user) {
-      const id = blog[i].posts.push(post) - 1
+    if (i.account === user) {
+      const id = i.posts.push(post) - 1
       post.created_at = new Date()
       post.id = id
     }
@@ -16,8 +16,8 @@ M.add = function (post, user) {
 
 M.get = function (id, user) {
   for (let i of blog) {
-    if (blog[i].account === user) {
-      return blog[i].posts[id]
+    if (i.account === user) {
+      return i.posts[id]
     }
   }
 }
@@ -29,7 +29,7 @@ M.list = function () {
 M.listpost = function (user) {
   for (let i of blog) {
     if (i.account === user) {
-      return i.posts
+      return i
     }
   }
 }

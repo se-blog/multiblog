@@ -7,7 +7,7 @@ const koaBody = require('koa-body')
 const Koa = require('koa')
 const app = (module.exports = new Koa())
 
-/* const login = 'jack' */
+const login = false
 
 app.use(logger())
 app.use(koaBody())
@@ -23,16 +23,16 @@ app.use(router.routes())
 
 async function list (ctx) {
   const blog = M.list()
-  ctx.body = await V.list(blog)
+  ctx.body = await V.list(blog, login)
 }
 
 async function add (ctx) {
-  ctx.body = await V.new()
+  ctx.body = await V.new(login)
 }
 
 async function listpost (ctx) {
   const posts = M.listpost(ctx.params.user)
-  ctx.body = await V.listpost(posts)
+  ctx.body = await V.listpost(posts, login)
 }
 
 async function show (ctx) {

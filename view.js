@@ -1,5 +1,5 @@
 var V = module.exports = {}
-const login = false
+/* const login = false */
 
 V.layout = function (title, content) {
   return `
@@ -66,7 +66,7 @@ V.layout = function (title, content) {
   `
 }
 
-V.list = function (blog) {
+V.list = function (blog, login) {
   let list = []
   for (let user of blog) {
     list.push(`
@@ -96,23 +96,23 @@ V.list = function (blog) {
   return V.layout('版面列表', content)
 }
 
-V.listpost = function (blog) {
+V.listpost = function (blog, login) {
   let list = []
-  for (let post of blog) {
+  for (let post of blog.posts) {
     list.push(`
       <li>
         <h2>${post.title}</h2>
-        <p><a href="/${blog.account}/post/${post.id}">讀取貼文</a></p>
+        <p><a href="/${login}/post/${post.id}">讀取貼文</a></p>
       </li>
     `)
   }
   let content = `
   <h1>貼文列表</h1>
-  <p>您總共有 <strong>${blog.length}</strong> 則貼文!</p>
+  <p>您總共有 <strong>${blog.posts.length}</strong> 則貼文!</p>
   ${
     (() => {
       let html = ''
-      if (login) {
+      if (blog.account === login) {
         html += `
         <p><a href="/${blog.account}/post/new">創建新貼文</a></p>
         `
@@ -127,7 +127,7 @@ V.listpost = function (blog) {
   return V.layout('貼文列表', content)
 }
 
-V.new = function () {
+V.new = function (login) {
   return V.layout('新增貼文', `
   <h1>新增貼文</h1>
   <p>創建一則新貼文</p>
