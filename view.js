@@ -98,7 +98,7 @@ V.list = function (blog, login) {
 
 V.listpost = function (blog, login) {
   let list = []
-  for (let post of blog.posts) {
+  for (let post of blog) {
     list.push(`
       <li>
         <h2>${post.title}</h2>
@@ -108,7 +108,7 @@ V.listpost = function (blog, login) {
   }
   let content = `
   <h1>貼文列表</h1>
-  <p>您總共有 <strong>${blog.posts.length}</strong> 則貼文!</p>
+  <p>您總共有 <strong>${blog.length}</strong> 則貼文!</p>
   ${
     (() => {
       let html = ''
@@ -139,9 +139,23 @@ V.new = function (login) {
   `)
 }
 
+V.edit = function (post) {
+  return V.layout('編輯貼文', `
+  <h1>編輯貼文</h1>
+  <p>編輯一則新貼文</p>
+  <form action="/editwell" method="post">
+    <p><input type="text" placeholder="Title" name="title" value="${post.title}"></p>
+    <p><textarea placeholder="Contents" name="body">${post.body}</textarea></p>
+    <p><input type="submit" value="editwell"></p>
+  </form>
+  `)
+}
+
 V.show = function (post) {
   return V.layout(post.title, `
     <h1>${post.title}</h1>
     <p>${post.body}</p>
+    <a href="/edit">edit</a>
+    <a href="/delete">delete</a>
   `)
 }
