@@ -1,10 +1,10 @@
 {
-  "name": "Multiblog",
+  "name": "blogmvc",
   "version": "0.0.1",
   "description": "多人網誌系統",
   "main": "server.js",
   "dependencies": {
-    "koa": "^2.5.3",
+    "koa": "^2.6.1",
     "koa-body": "^4.0.4",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0"
@@ -16,6 +16,11 @@
     "supertest": "^3.3.0"
   },
   "scripts": {
+    "posttest": "mocha posttest",
+    "modifytest": "mocha modifytest",
+    "deletetest": "mocha deletetest",
+    "signuptest": "mocha signuptest",
+    "logintest" : "mocha logintest",
     "test": "mocha",
     "start": "node server"
   },

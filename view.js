@@ -1,5 +1,4 @@
 var V = module.exports = {}
-/* const login = false */
 
 V.layout = function (title, content) {
   return `
@@ -66,87 +65,70 @@ V.layout = function (title, content) {
   `
 }
 
-V.list = function (blog, login) {
-  let list = []
-  for (let user of blog) {
-    list.push(`
-      <li>
-        <a href="${user.account}/posts"><p>${user.account}(${user.posts.length})</p></a>
-      </li>
-    `)
-  }
+V.list = function (posts, users) {
   let content = `
+  <p><a href="/signup">註冊</a> <a href="/login">登入</a></p>
   <h1>版面列表</h1>
-  <p>您總共有 <strong>${blog.length}</strong> 個版面!</p>
+  <p>您總共有 <strong>${users.length}</strong> 個版面!</p>
+  <ul id="posts">
   ${
     (() => {
       let html = ''
-      if (login) {
+      for (let user of users) {
+        let x = 0
+        for (let post of posts) {
+          if (post.owner === user) {
+            x++
+          }
+        }
         html += `
-        <p><a href="/${login}/post/new">創建新貼文</a></p>
+          <li>
+            <p><a href="/${user}/posts">${user}(${x})</a></p>
+          </li>
         `
       }
       return html
-    })()
-}
-  <ul id="posts">
-    ${list.join('\n')}
+    }
+    )()
+  }
   </ul>
   `
   return V.layout('版面列表', content)
 }
 
-V.listpost = function (blog, login) {
-  let list = []
-  for (let post of blog) {
-    list.push(`
-      <li>
-        <h2>${post.title}</h2>
-        <p><a href="/${login}/post/${post.id}">讀取貼文</a></p>
-      </li>
-    `)
-  }
+V.listpost = function (posts, user) {
   let content = `
   <h1>貼文列表</h1>
-  <p>您總共有 <strong>${blog.length}</strong> 則貼文!</p>
+  <p>您總共有 <strong>${posts.length}</strong> 則貼文!</p>
+  <p><a href="/${user}/post/new">創建新貼文</a></p>
+  <ul id="posts">
   ${
     (() => {
       let html = ''
-      if (blog.account === login) {
+      for (let post of posts) {
         html += `
-        <p><a href="/${blog.account}/post/new">創建新貼文</a></p>
+          <li>
+            <p><a href="/${post.owner}/post/${post.id}">${post.title}</a></p>
+          </li>
         `
       }
       return html
-    })()
-}
-  <ul id="posts">
-    ${list.join('\n')}
+    }
+    )()
+  }
   </ul>
   `
   return V.layout('貼文列表', content)
 }
 
-V.new = function (login) {
+V.new = function (user) {
   return V.layout('新增貼文', `
   <h1>新增貼文</h1>
   <p>創建一則新貼文</p>
-  <form action="/${login}/post" method="post">
+  <form action="/${user}/post" method="post">
     <p><input type="text" placeholder="Title" name="title"></p>
     <p><textarea placeholder="Contents" name="body"></textarea></p>
     <p><input type="submit" value="Create"></p>
-  </form>
-  `)
-}
-
-V.edit = function (post) {
-  return V.layout('編輯貼文', `
-  <h1>編輯貼文</h1>
-  <p>編輯一則新貼文</p>
-  <form action="/editwell" method="post">
-    <p><input type="text" placeholder="Title" name="title" value="${post.title}"></p>
-    <p><textarea placeholder="Contents" name="body">${post.body}</textarea></p>
-    <p><input type="submit" value="editwell"></p>
   </form>
   `)
 }
@@ -155,7 +137,5 @@ V.show = function (post) {
   return V.layout(post.title, `
     <h1>${post.title}</h1>
     <p>${post.body}</p>
-    <a href="/edit">edit</a>
-    <a href="/delete">delete</a>
   `)
 }

@@ -1,55 +1,37 @@
 const M = module.exports = {}
 
-const blog = [{'account': 'Jack', posts: []},
-              {'account': 'Merry', posts: []},
-              {'account': 'Ben', posts: []}]
+const posts = []
+const users = []
 
 M.add = function (post, user) {
-  for (let owner of blog) {
-    if (owner.account === user) {
-      const id = owner.posts.push(post) - 1
-      post.created_at = new Date()
-      post.id = id
-    }
-  }
+  const id = posts.push(post) - 1
+  post.created_at = new Date()
+  post.id = id.toString()
+  post.owner = user
 }
 
-M.get = function (id, user) {
-  for (let owner of blog) {
-    if (owner.account === user) {
-      return owner.posts[id]
+M.get = function (id) {
+  for (let post of posts) {
+    if (post.id === id) {
+      return post
     }
   }
 }
 
 M.list = function () {
-  return blog
+  return posts
 }
 
 M.listpost = function (user) {
-  for (let owner of blog) {
-    if (owner.account === user) {
-      return owner.posts
+  let list = []
+  for (let post of posts) {
+    if (post.owner === user) {
+      list.push(post)
     }
   }
+  return list
 }
 
-M.editwell = function (post, user, id) {
-  for (let target of blog) {
-    if (target.account === user) {
-      let OldPost = target.posts[id]
-      post.created_at = OldPost.created_at
-      target.posts[id] = post
-    }
-  }
-}
-
-M.del = function (user, id) {
-  for (let owner of blog) {
-    if (owner.account === user) {
-      if (owner.posts[id]) {
-        owner.posts.splice(id, 1)
-      }
-    }
-  }
+M.getuser = function () {
+  return users
 }

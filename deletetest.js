@@ -3,23 +3,9 @@ const expect = require('chai').expect
 const server = require('./server').listen()
 const request = require('supertest').agent(server)
 
-describe('貼文測試', function () {
+describe('刪除貼文測試', function () {
   after(function () {
     server.close()
-  })
-
-  describe('GET /', function () { // list
-    it('內文標題應該為《版面列表》，而且只有 0 個版面', function (done) {
-      request.get('/').expect(200, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header['content-type']).to.include('html')
-        expect(res.text).to.include('<title>版面列表</title>')
-        expect(res.text).to.include('<p>您總共有 <strong>0</strong> 個版面!</p>')
-        expect(res.text).to.include('<p><a href="/signup">註冊</a> <a href="/login">登入</a></p>')
-        done()
-      })
-    })
   })
 
   describe('GET /signup', function () { // signup
@@ -47,45 +33,6 @@ describe('貼文測試', function () {
           expect(res.header.location).to.equal('/')
           done()
         })
-    })
-  })
-
-  describe('GET /', function () { // list
-    it('內文標題應該為《版面列表》，而且只有 1 個版面', function (done) {
-      request.get('/').expect(200, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header['content-type']).to.include('html')
-        expect(res.text).to.include('<title>版面列表</title>')
-        expect(res.text).to.include('<p>您總共有 <strong>1</strong> 個版面!</p>')
-        expect(res.text).to.include('<p><a href="/signup">註冊</a> <a href="/login">登入</a></p>')
-        done()
-      })
-    })
-  })
-
-  describe('GET /Jack/posts', function () { // listpost
-    it('內文標題應該為《貼文列表》，而且只有 0 則貼文', function (done) {
-      request.get('/Jack/posts').expect(200, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header['content-type']).to.include('html')
-        expect(res.text).to.include('<title>貼文列表</title>')
-        expect(res.text).to.include('<p>您總共有 <strong>0</strong> 則貼文!</p>')
-        done()
-      })
-    })
-  })
-
-  describe('GET /Jack/post/new', function () { // add
-    it('未登入，不可創建新貼文', function (done) {
-      request
-      .expect(401, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header.location).to.equal('/login')
-        done()
-      })
     })
   })
 
@@ -118,7 +65,7 @@ describe('貼文測試', function () {
   })
 
   describe('GET /Jack/post/new', function () { // add
-    it('已登入，可以新增貼文', function (done) {
+    it('內文標題應該為《新增貼文》', function (done) {
       request.get('/Jack/post/new').expect(200, function (err, res) {
         if (err) return done(err)
 
@@ -153,46 +100,6 @@ describe('貼文測試', function () {
         expect(res.header['content-type']).to.include('html')
         expect(res.text).to.include('<h1>貼文 0</h1>')
         expect(res.text).to.include('<p>內容 0</p>')
-        done()
-      })
-    })
-  })
-
-  describe('GET /edit/0', function () { // edit
-    it('內文標題應該為《編輯貼文》，而且有 1 個表單', function (done) {
-      request.get('/edit/0').expect(200, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header['content-type']).to.include('html')
-        expect(res.text).to.include('<title>編輯貼文</title>')
-        expect(res.text).to.include('<form action="/modify/0" method="post">')
-        done()
-      })
-    })
-  })
-
-  describe('GET /modify/0', function () { // modify
-    it('應該修改貼文，而且轉到使用者版面 /Jack/posts', function (done) {
-      request
-        .post('/modify/0')
-        .send({ title: '貼文 0', body: '123' })
-        .end(function (err, res) {
-          if (err) return done(err)
-
-          expect(res.header.location).to.equal('/Jack/posts')
-          done()
-        })
-    })
-  })
-
-  describe('GET /Jack/post/0', function () { // 檢視是否修改成功
-    it('應該會看到第 0 則貼文', function (done) {
-      request.get('/Jack/post/0').expect(200, function (err, res) {
-        if (err) return done(err)
-
-        expect(res.header['content-type']).to.include('html')
-        expect(res.text).to.include('<h1>貼文 0</h1>')
-        expect(res.text).to.include('<p>123</p>')
         done()
       })
     })
