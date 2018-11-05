@@ -30,7 +30,7 @@ describe('刪除貼文測試', function () {
         .end(function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/')
+          expect(res.header.location).to.equal('/login')
           done()
         })
     })
@@ -105,13 +105,15 @@ describe('刪除貼文測試', function () {
     })
   })
 
-  describe('GET /delete/0', function () { // delete
+  describe('GET /Jack/delete/0', function () { // delete
     it('應該會刪除貼文，並且轉到使用者版面 /Jack/posts', function (done) {
-      request.get('/delete/0').expect(200, function (err, res) {
-        if (err) return done(err)
+      request
+        .get('/Jack/delete/0').expect(302, function (err, res) {
+          if (err) return done(err)
 
-        done()
-      })
+          expect(res.header.location).to.equal('/Jack/posts')
+          done()
+        })
     })
   })
 

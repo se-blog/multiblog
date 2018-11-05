@@ -44,7 +44,7 @@ describe('註冊測試', function () {
         .end(function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/')
+          expect(res.header.location).to.equal('/login')
           done()
         })
     })
@@ -58,7 +58,8 @@ describe('註冊測試', function () {
         .expect(401, function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/signup')
+          expect(res.header['content-type']).to.include('html')
+          expect(res.text).to.include('<p>使用者已存在，請重新<a href="/signup">註冊</a></p>')
           done()
         })
     })

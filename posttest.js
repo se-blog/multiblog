@@ -44,7 +44,7 @@ describe('貼文測試', function () {
         .end(function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/')
+          expect(res.header.location).to.equal('/login')
           done()
         })
     })
@@ -79,11 +79,11 @@ describe('貼文測試', function () {
 
   describe('GET /Jack/post/new', function () { // add
     it('未登入，不可創建新貼文', function (done) {
-      request
-      .expect(401, function (err, res) {
+      request.get('/Jack/post/new').expect(401, function (err, res) {
         if (err) return done(err)
 
-        expect(res.header.location).to.equal('/login')
+        expect(res.header['content-type']).to.include('html')
+        expect(res.text).to.include('<p>請先<a href="/login">登入</a></p>')
         done()
       })
     })

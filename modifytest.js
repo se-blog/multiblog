@@ -30,7 +30,7 @@ describe('修改貼文測試', function () {
         .end(function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/')
+          expect(res.header.location).to.equal('/login')
           done()
         })
     })
@@ -100,46 +100,48 @@ describe('修改貼文測試', function () {
         expect(res.header['content-type']).to.include('html')
         expect(res.text).to.include('<h1>貼文 0</h1>')
         expect(res.text).to.include('<p>內容 0</p>')
+        expect(res.text).to.include('<p><a href="/Jack/edit/0">編輯</a> <a href="/Jack/delete/0">刪除</a></p>')
         done()
       })
     })
   })
 
-  describe('GET /edit/0', function () { // edit
+  describe('GET /Jack/edit/0', function () { // edit
     it('內文標題應該為《編輯貼文》，而且有 1 個表單', function (done) {
-      request.get('/edit/0').expect(200, function (err, res) {
+      request.get('/Jack/edit/0').expect(200, function (err, res) {
         if (err) return done(err)
 
         expect(res.header['content-type']).to.include('html')
         expect(res.text).to.include('<title>編輯貼文</title>')
-        expect(res.text).to.include('<form action="/modify/0" method="post">')
+        expect(res.text).to.include('<form action="/Jack/modify/0" method="post">')
         done()
       })
     })
   })
 
-  describe('GET /modify/0', function () { // modify
+  describe('GET /Jack/modify/0', function () { // modify
     it('應該修改貼文，而且轉到使用者版面 /Jack/posts', function (done) {
       request
-        .post('/modify/0')
+        .post('/Jack/modify/0')
         .send({ title: '貼文 0', body: '123' })
         .end(function (err, res) {
           if (err) return done(err)
 
-          expect(res.header.location).to.equal('/Jack/posts')
+          expect(res.header.location).to.equal('/Jack/post/0')
           done()
         })
     })
   })
 
   describe('GET /Jack/post/0', function () { // 檢視是否修改成功
-    it('應該會看到第 0 則貼文', function (done) {
+    it('應該會看到內容已成功修改', function (done) {
       request.get('/Jack/post/0').expect(200, function (err, res) {
         if (err) return done(err)
 
         expect(res.header['content-type']).to.include('html')
         expect(res.text).to.include('<h1>貼文 0</h1>')
         expect(res.text).to.include('<p>123</p>')
+        expect(res.text).to.include('<p><a href="/Jack/edit/0">編輯</a> <a href="/Jack/delete/0">刪除</a></p>')
         done()
       })
     })
