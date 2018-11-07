@@ -2,12 +2,15 @@ const M = module.exports = {}
 
 const posts = []
 const users = []
+let index = 0
 
 M.add = function (post, user) {
-  const id = posts.push(post) - 1
+  const id = index
   post.created_at = new Date()
   post.id = id.toString()
   post.owner = user
+  posts.push(post)
+  index++
 }
 
 M.get = function (id) {
