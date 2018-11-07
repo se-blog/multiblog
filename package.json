@@ -20,7 +20,7 @@
     "modifytest": "mocha modifytest",
     "deletetest": "mocha deletetest",
     "signuptest": "mocha signuptest",
-    "logintest" : "mocha logintest",
+    "logintest": "mocha logintest",
     "test": "mocha test",
     "start": "node server"
   },

@@ -1,4 +1,4 @@
-var V = module.exports = {}
+var V = (module.exports = {})
 
 V.layout = function (title, content) {
   return `
@@ -71,26 +71,23 @@ V.list = function (posts, users) {
   <h1>版面列表</h1>
   <p>您總共有 <strong>${users.length}</strong> 個版面!</p>
   <ul id="posts">
-  ${
-    (() => {
-      let html = ''
-      for (let user of users) {
-        let x = 0
-        for (let post of posts) {
-          if (post.owner === user) {
-            x++
-          }
+  ${(() => {
+    let html = ''
+    for (let user of users) {
+      let x = 0
+      for (let post of posts) {
+        if (post.owner === user) {
+          x++
         }
-        html += `
+      }
+      html += `
           <li>
             <p><a href="/${user}/posts">${user}(${x})</a></p>
           </li>
         `
-      }
-      return html
     }
-    )()
-  }
+    return html
+  })()}
   </ul>
   `
   return V.layout('版面列表', content)
@@ -102,27 +99,26 @@ V.listpost = function (posts, user) {
   <p>您總共有 <strong>${posts.length}</strong> 則貼文!</p>
   <p><a href="/${user}/post/new">創建新貼文</a></p>
   <ul id="posts">
-  ${
-    (() => {
-      let html = ''
-      for (let post of posts) {
-        html += `
+  ${(() => {
+    let html = ''
+    for (let post of posts) {
+      html += `
           <li>
             <p><a href="/${post.owner}/post/${post.id}">${post.title}</a></p>
           </li>
         `
-      }
-      return html
     }
-    )()
-  }
+    return html
+  })()}
   </ul>
   `
   return V.layout('貼文列表', content)
 }
 
 V.new = function (user) {
-  return V.layout('新增貼文', `
+  return V.layout(
+    '新增貼文',
+    `
   <h1>新增貼文</h1>
   <p>創建一則新貼文</p>
   <form action="/${user}/post" method="post">
@@ -130,12 +126,32 @@ V.new = function (user) {
     <p><textarea placeholder="Contents" name="body"></textarea></p>
     <p><input type="submit" value="Create"></p>
   </form>
-  `)
+  `
+  )
 }
 
 V.show = function (post) {
-  return V.layout(post.title, `
+  return V.layout(
+    post.title,
+    `
     <h1>${post.title}</h1>
     <p>${post.body}</p>
-  `)
+    <p><a href="/Jack/edit/0">編輯</a> <a href="/Jack/delete/0">刪除</a></p>
+  `
+  )
+}
+
+V.edit = function (post, user) {
+  return V.layout(
+    '編輯貼文',
+    `
+  <h1>編輯貼文</h1>
+  <p>編輯一則新貼文</p>
+  <form action="/${user}/modify/${post.id}" method="post">
+    <p><input type="text" placeholder="Title" name="title" value="${post.title}"></p>
+    <p><textarea placeholder="Contents" name="body"></textarea>${post.body}</p>
+    <p><input type="submit" value="edit"></p>
+  </form>
+  `
+  )
 }

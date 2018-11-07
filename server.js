@@ -15,7 +15,10 @@ router
   .get('/:user/posts', listpost)
   .get('/:user/post/new', add)
   .get('/:user/post/:id', show)
+  .get('/:user/edit/:id', edit)
+  .get('/:user/delete/:id', del)
   .post('/:user/post', create)
+  .post('/:user/modify/:id', modify)
 
 app.use(router.routes())
 
@@ -47,7 +50,29 @@ async function create (ctx) {
   const post = ctx.request.body
   const user = ctx.params.user
   M.add(post, user)
-  ctx.redirect('/')
+  ctx.redirect(`/${user}/posts`)
+}
+
+async function edit (ctx) {
+  const user = ctx.params.user
+  const id = ctx.params.id
+  const post = M.get(id)
+  ctx.body = await V.edit(post, user)
+}
+
+async function modify (ctx) {
+  const post = ctx.request.body
+  const user = ctx.params.user
+  const id = ctx.params.id
+  M.modify(post, user, id)
+  ctx.redirect(`/${user}/post/${id}`)
+}
+
+async function del (ctx) {
+  const user = ctx.params.user
+  const id = ctx.params.id
+  M.del(user, id)
+  ctx.redirect(`/${user}/posts`)
 }
 
 if (!module.parent) {

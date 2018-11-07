@@ -1,4 +1,4 @@
-const M = module.exports = {}
+const M = (module.exports = {})
 
 const posts = []
 const users = []
@@ -17,6 +17,26 @@ M.get = function (id) {
   for (let post of posts) {
     if (post.id === id) {
       return post
+    }
+  }
+}
+
+M.modify = function (post, user, id) {
+  for (let p of posts) {
+    if (p.id == id && p.owner == user) {
+      p.title = post.title
+      p.body = post.body
+      p.created_at = new Date()
+      return
+    }
+  }
+}
+
+M.del = function (user, id) {
+  for (var p = 0; p < posts.length; p++) {
+    if (posts[p].owner == user && posts[p].id == id) {
+      posts.splice(p, 1)
+      return
     }
   }
 }
