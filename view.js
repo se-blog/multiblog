@@ -57,6 +57,10 @@ V.layout = function (title, content) {
     </style>
   </head>
   <body>
+  <p><a href="/">首頁</a><p/>
+  <form action="/search" method="post">
+    <input type="text" name="search" style="font-size:.8em"><input type="submit" value="search" style="height:40px">
+  </form>
     <section id="content">
       ${content}
     </section>
@@ -65,29 +69,44 @@ V.layout = function (title, content) {
   `
 }
 
-V.list = function (posts, users) {
+V.list = function (posts, users, login) {
   let content = `
-  <p><a href="/signup">註冊</a> <a href="/login">登入</a></p>
+  ${
+    (() => {
+      let html = ''
+      if (login === false) {
+        html += `
+          <p><a href="/signup">註冊</a> <a href="/login">登入</a></p>
+        `
+      }
+      return html
+    }
+    )()
+  }
   <h1>版面列表</h1>
   <p>您總共有 <strong>${users.length}</strong> 個版面!</p>
+  <p><a href="/${login}/post/new">創建新貼文</a></p>
   <ul id="posts">
-  ${(() => {
-    let html = ''
-    for (let user of users) {
-      let x = 0
-      for (let post of posts) {
-        if (post.owner === user) {
-          x++
+  ${
+    (() => {
+      let html = ''
+      for (let user of users) {
+        let x = 0
+        for (let post of posts) {
+          if (post.owner === user.account) {
+            x++
+          }
         }
-      }
-      html += `
+        html += `
           <li>
-            <p><a href="/${user}/posts">${user}(${x})</a></p>
+            <p><a href="/${user.account}/posts">${user.account}(${x})</a></p>
           </li>
         `
+      }
+      return html
     }
-    return html
-  })()}
+    )()
+  }
   </ul>
   `
   return V.layout('版面列表', content)
@@ -136,7 +155,7 @@ V.show = function (post) {
     `
     <h1>${post.title}</h1>
     <p>${post.body}</p>
-    <p><a href="/Jack/edit/0">編輯</a> <a href="/Jack/delete/0">刪除</a></p>
+    <p><a href="/${post.owner}/edit/0">編輯</a> <a href="/${post.owner}/delete/0">刪除</a></p>
   `
   )
 }
@@ -149,9 +168,53 @@ V.edit = function (post, user) {
   <p>編輯一則新貼文</p>
   <form action="/${user}/modify/${post.id}" method="post">
     <p><input type="text" placeholder="Title" name="title" value="${post.title}"></p>
-    <p><textarea placeholder="Contents" name="body"></textarea>${post.body}</p>
+    <p><textarea name="body" value="${post.body}">${post.body}</textarea></p>
     <p><input type="submit" value="edit"></p>
   </form>
   `
   )
+}
+
+V.signup = function () {
+  let content = `
+   <h1>註冊</h1>
+   <form action="/check" method="post">
+    <p><input type="text" name="account"></p>
+    <p><input type="password" name="password"></p>
+    <p><input type="submit" value="註冊"</p>
+   </form>
+  `
+  return V.layout('註冊帳號', content)
+}
+
+V.login = function () {
+  let content = `
+   <h1>登入</h1>
+   <form action="/enter" method="post">
+    <p><input type="text" name="account"></p>
+    <p><input type="password" name="password"></p>
+    <p><input type="submit" value="登入"</p>
+   </form>
+  `
+  return V.layout('登入帳號', content)
+}
+
+V.searchresult = function (result) {
+  let content = `
+    <h1>搜尋結果</h1>
+    <ul id="posts">
+    ${(() => {
+      let html = ''
+      for (let post of result) {
+        html += `
+            <li>
+              <p><a href="/${post.owner}/post/${post.id}">${post.title}</a></p>
+            </li>
+          `
+      }
+      return html
+    })()}
+    </ul>
+    `
+  return V.layout('貼文列表', content)
 }

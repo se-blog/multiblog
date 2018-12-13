@@ -23,7 +23,7 @@ M.get = function (id) {
 
 M.modify = function (post, user, id) {
   for (let p of posts) {
-    if (p.id == id && p.owner == user) {
+    if (p.id === id && p.owner === user) {
       p.title = post.title
       p.body = post.body
       p.created_at = new Date()
@@ -34,7 +34,7 @@ M.modify = function (post, user, id) {
 
 M.del = function (user, id) {
   for (var p = 0; p < posts.length; p++) {
-    if (posts[p].owner == user && posts[p].id == id) {
+    if (posts[p].owner === user && posts[p].id === id) {
       posts.splice(p, 1)
       return
     }
@@ -57,4 +57,37 @@ M.listpost = function (user) {
 
 M.getuser = function () {
   return users
+}
+
+M.check = function (user) {
+  let target = false
+  for (let olduser of users) {
+    if (user.account === olduser.account) {
+      target = true
+      break
+    }
+  }
+  if (!target) {
+    users.push(user)
+  }
+  return target
+}
+
+M.login = function (user) {
+  for (let olduser of users) {
+    if (olduser.account === user.account && olduser.password === user.password) {
+      return true
+    }
+  }
+  return false
+}
+
+M.search = function (target) {
+  let searchlist = []
+  for (let post of posts) {
+    if (post.title === target.search) {
+      searchlist.push(post)
+    }
+  }
+  return searchlist
 }
